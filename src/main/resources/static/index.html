@@ -1,19 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Dictionary App</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <title>Dictionary App 📖</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>Dictionary App 📖</h1>
-        <input type="text" id="wordInput" placeholder="Enter a word">
-        <button onclick="searchWord()">Search</button>
+<body class="bg-gradient-to-r from-blue-100 to-purple-200 min-h-screen">
 
-        <div id="result"></div>
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-blue-700">📚 Dictionary</h1>
+    <div class="space-x-4">
+      <a href="index.html" class="text-blue-600 hover:underline">Home</a>
+      <a href="saved.html" class="text-blue-600 hover:underline">Saved Words</a>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="max-w-2xl mx-auto bg-white mt-10 p-8 rounded-2xl shadow-2xl">
+    
+    <!-- Word of the Day -->
+    <div id="wotdSection" class="mb-6 text-center">
+      <h2 class="text-xl font-bold text-purple-700 mb-2">🌟 Word of the Day</h2>
+      <p id="wotd" class="text-gray-700">Loading...</p>
     </div>
 
-    <script src="js/script.js"></script>
+    <!-- Search -->
+    <div class="text-center mb-6">
+      <input id="wordInput" type="text" placeholder="Enter a word..." 
+        class="p-3 w-3/4 rounded-l-lg border-2 border-blue-300 focus:outline-none focus:border-blue-500" />
+      <button onclick="searchWord()" 
+        class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-r-lg font-semibold">
+        Search
+      </button>
+    </div>
+
+    <!-- Loading and Result -->
+    <div id="loading" class="text-blue-500 mb-4 hidden">Searching...</div>
+    <div id="result" class="text-left mt-4"></div>
+
+    <!-- About -->
+    <div class="mt-8 text-gray-700">
+      <h2 class="text-lg font-semibold text-gray-800 mb-2">📖 About This App</h2>
+      <p>This dictionary app fetches meanings using Merriam-Webster's API and allows you to save your favorite words in a MongoDB database. 
+      You can view and revisit them anytime on the 'Saved Words' page.</p>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
 </body>
 </html>
