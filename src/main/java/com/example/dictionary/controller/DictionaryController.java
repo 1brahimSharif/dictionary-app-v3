@@ -6,13 +6,14 @@ import com.example.dictionary.service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*") // Allow requests from all origins (especially useful for testing frontend)
+@CrossOrigin(origins = "*")
 public class DictionaryController {
 
     @Autowired
@@ -21,27 +22,23 @@ public class DictionaryController {
     @Autowired
     private SavedWordRepository savedWordRepository;
 
-    // Fetch definition from Merriam-Webster
     @GetMapping("/definition")
     public ResponseEntity<String> getDefinition(@RequestParam String word) {
         String definition = dictionaryService.fetchDefinition(word);
         return ResponseEntity.ok(definition);
     }
 
-    // Save selected word to MongoDB
     @PostMapping("/save")
     public ResponseEntity<String> saveWord(@RequestBody SavedWord word) {
         savedWordRepository.save(word);
         return ResponseEntity.ok("Word saved!");
     }
 
-    // Get all saved words (used in saved.html)
     @GetMapping("/saved-words")
     public List<SavedWord> getSavedWords() {
         return savedWordRepository.findAll();
     }
 
-    // Get a random saved word (Word of the Day)
     @GetMapping("/wotd")
     public ResponseEntity<?> getWordOfTheDay() {
         List<SavedWord> allWords = savedWordRepository.findAll();
@@ -51,5 +48,24 @@ public class DictionaryController {
         Random random = new Random();
         SavedWord randomWord = allWords.get(random.nextInt(allWords.size()));
         return ResponseEntity.ok(randomWord);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteWord(@PathVariable String id) {
+        savedWordRepository.deleteById(id);
+        return ResponseEntity.ok("Word deleted successfully.");
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateMeaning(@PathVariable String id, @RequestBody SavedWord updatedWord) {
+        Optional<SavedWord> optionalWord = savedWordRepository.findById(id);
+        if (optionalWord.isPresent()) {
+            SavedWord existingWord = optionalWord.get();
+            existingWord.setMeaning(updatedWord.getMeaning());
+            savedWordRepository.save(existingWord);
+            return ResponseEntity.ok("Word updated successfully.");
+        } else {
+            return ResponseEntity.status(404).body("Word not found.");
+        }
     }
 }
